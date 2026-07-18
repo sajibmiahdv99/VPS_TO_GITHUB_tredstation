@@ -1,0 +1,23 @@
+# AGENT TRED — https://tred.agentsupport360.tech
+# DNS A: tred.agentsupport360.tech → 195.35.7.96
+
+tred.agentsupport360.tech {
+	encode gzip zstd
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy strict-origin-when-cross-origin
+		-Server
+	}
+
+	handle /supabase/* {
+		uri strip_prefix /supabase
+		reverse_proxy 127.0.0.1:8000
+	}
+
+	handle {
+		reverse_proxy 127.0.0.1:3000
+	}
+}

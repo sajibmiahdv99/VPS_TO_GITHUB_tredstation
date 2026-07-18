@@ -1,0 +1,2 @@
+ALTER TABLE public.channel_risk_settings ADD COLUMN IF NOT EXISTS exchange_account_id uuid REFERENCES public.exchange_accounts(id) ON DELETE SET NULL;
+ALTER TABLE public.user_risk_settings ADD COLUMN IF NOT EXISTS default_exchange_account_id uuid REFERENCES public.exchange_accounts(id) ON DELETE SET NULL;

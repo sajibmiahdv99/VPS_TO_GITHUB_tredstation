@@ -1,0 +1,14 @@
+{$DOMAIN:localhost} {
+	encode gzip
+
+	# Self-hosted Supabase API (Kong)
+	handle /supabase/* {
+		uri strip_prefix /supabase
+		reverse_proxy kong:8000
+	}
+
+	# Hermes app
+	handle {
+		reverse_proxy app:3000
+	}
+}

@@ -1,0 +1,114 @@
+# Hermes Agent Workstation — full VPS stack (no Lovable)
+# Usage:
+#   cd deploy && cp .env.example .env && ./scripts/bootstrap.sh
+#   # fill real JWT anon/service keys (docs/DEPLOY_VPS.md)
+#   docker compose --env-file .env up -d --build
+
+name: hermes
+
+services:
+  db:
+    image: supabase/postgres:15.8.1.060
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+    volumes:
+      - hermes_db:/var/lib/postgresql/data
+      - ../supabase/migrations:/docker-entrypoint-initdb.d/migrations:ro
+      - ./init-db.sh:/docker-entrypoint-initdb.d/99-hermes-migrations.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks: [hermes]
+
+  # Minimal API gateway-compatible endpoint: PostgREST + GoTrue can be added.
+  # For production self-hosted Supabase, merge official supabase/docker compose.
+  # This slim profile runs Postgres + app; point SUPABASE_URL at an external
+  # self-hosted Supabase if you deploy the full stack separately.
+  app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      args:
+        VITE_SUPABASE_URL: ${VITE_SUPABASE_URL}
+        VITE_SUPABASE_PUBLISHABLE_KEY: ${VITE_SUPABASE_PUBLISHABLE_KEY}
+        VITE_SUPABASE_PROJECT_ID: ${VITE_SUPABASE_PROJECT_ID:-local}
+        VITE_BRAND_NAME: ${VITE_BRAND_NAME:-Hermes}
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      SUPABASE_URL: ${SUPABASE_URL}
+      SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY}
+      PUBLIC_APP_URL: ${PUBLIC_APP_URL}
+      CRON_SECRET: ${CRON_SECRET}
+      PRICE_RELAY_SECRET: ${PRICE_RELAY_SECRET}
+      EXCHANGE_ENCRYPTION_KEY: ${EXCHANGE_ENCRYPTION_KEY}
+      TELEGRAM_SESSION_ENC_KEY: ${TELEGRAM_SESSION_ENC_KEY}
+      PLATFORM_SECRETS_KEY: ${PLATFORM_SECRETS_KEY}
+      PAYMENT_WEBHOOK_SECRET: ${PAYMENT_WEBHOOK_SECRET}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    networks: [hermes]
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on: [app]
+    networks: [hermes]
+    profiles: ["with-tls"]
+
+  cron:
+    image: curlimages/curl:8.12.1
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "/scripts/cron-loop.sh"]
+    environment:
+      HERMES_BASE_URL: http://app:3000
+      CRON_SECRET: ${CRON_SECRET}
+      CRON_INTERVAL_SEC: ${CRON_INTERVAL_SEC:-10}
+    volumes:
+      - ./scripts/cron-loop.sh:/scripts/cron-loop.sh:ro
+    depends_on: [app]
+    networks: [hermes]
+
+  price-relay:
+    image: node:22-bookworm-slim
+    restart: unless-stopped
+    working_dir: /workers
+    command: ["node", "price-relay.mjs"]
+    environment:
+      HERMES_BASE_URL: http://app:3000
+      PRICE_RELAY_SECRET: ${PRICE_RELAY_SECRET}
+      RELAY_SYMBOLS: ${RELAY_SYMBOLS:-BTCUSDT,ETHUSDT,SOLUSDT}
+      FLUSH_INTERVAL_MS: ${FLUSH_INTERVAL_MS:-1500}
+    volumes:
+      - ../workers/price-relay.mjs:/workers/price-relay.mjs:ro
+    depends_on: [app]
+    networks: [hermes]
+    profiles: ["with-relay"]
+
+volumes:
+  hermes_db:
+  caddy_data:
+  caddy_config:
+
+networks:
+  hermes:
+    driver: bridge

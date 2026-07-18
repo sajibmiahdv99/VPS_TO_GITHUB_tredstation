@@ -1,0 +1,2 @@
+ALTER TABLE public.user_risk_settings ADD COLUMN IF NOT EXISTS market_fallback boolean NOT NULL DEFAULT false;
+ALTER TABLE public.user_risk_settings ADD COLUMN IF NOT EXISTS max_slippage_percent numeric;

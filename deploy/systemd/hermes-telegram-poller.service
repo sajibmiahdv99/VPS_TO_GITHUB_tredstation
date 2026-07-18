@@ -1,0 +1,17 @@
+[Unit]
+Description=AGENT TRED Telegram poller
+After=hermes-app.service
+Requires=hermes-app.service
+
+[Service]
+Type=simple
+WorkingDirectory=/root/hermes-workstation
+Environment=HERMES_BASE_URL=http://127.0.0.1:3000
+EnvironmentFile=-/root/hermes-workstation/.env
+Environment=POLL_INTERVAL_MS=15000
+ExecStart=/usr/bin/node /root/hermes-workstation/workers/telegram-poller.mjs
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
