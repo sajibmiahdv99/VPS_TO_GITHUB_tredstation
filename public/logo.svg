@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="AGENT TRED">
+  <defs>
+    <linearGradient id="at-grad" x1="8" y1="8" x2="56" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6366F1"/>
+      <stop offset="1" stop-color="#A78BFA"/>
+    </linearGradient>
+    <linearGradient id="at-gold" x1="12" y1="48" x2="52" y2="20" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBBF24"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#0B0F1A"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="14.5" stroke="url(#at-grad)" stroke-opacity="0.55" stroke-width="1.5"/>
+  <!-- stylized A -->
+  <path d="M18 46 L28 18 H36 L46 46 H39.5 L37.2 39 H26.8 L24.5 46 H18 Z M28.8 33 H35.2 L32 23.5 L28.8 33 Z" fill="url(#at-grad)"/>
+  <!-- tick / T stem accent -->
+  <path d="M30 18 H42 V24 H36 V46 H30 V18 Z" fill="url(#at-grad)" opacity="0.92"/>
+  <!-- gold chart tick -->
+  <path d="M14 42 L22 34 L29 38 L42 24 L50 30" stroke="url(#at-gold)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

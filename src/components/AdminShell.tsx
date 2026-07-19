@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND } from "@/lib/brand";
+import { BrandLogo } from "@/components/BrandLogo";
 import { getMyRoles } from "@/lib/auth/role.functions";
 import { canAccessAdminPath, hasCapability, type Capability } from "@/lib/auth/permissions";
 import { cn } from "@/lib/utils";
@@ -93,9 +94,7 @@ export function AdminShell({ children }: { children?: ReactNode }) {
       <aside className="hidden w-[260px] shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex">
         <div className="p-5">
           <div className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-amber-500 text-[10px] font-bold leading-none text-background shadow-lg shadow-amber-500/20">
-              {BRAND.adminInitial}
-            </span>
+            <BrandLogo size="md" variant="admin" />
             <div>
               <div className="text-sm font-semibold leading-none">Admin panel</div>
               <div className="mt-1 text-[10px] uppercase tracking-wide text-amber-400/90">{roleBadge}</div>

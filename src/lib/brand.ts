@@ -7,4 +7,12 @@ export const BRAND = {
   footerName: import.meta.env.VITE_BRAND_FOOTER_NAME ?? "AGENT TRED",
   fullName: import.meta.env.VITE_BRAND_FULL_NAME ?? "AGENT TRED — Signal Trading Platform",
   supportEmail: import.meta.env.VITE_BRAND_SUPPORT_EMAIL ?? "support@agenttred.local",
+  /** Primary logo mark (PNG) */
+  logoUrl: import.meta.env.VITE_BRAND_LOGO_URL ?? "/logo.png",
+  /** Vector fallback */
+  logoSvgUrl: import.meta.env.VITE_BRAND_LOGO_SVG_URL ?? "/logo.svg",
+  faviconUrl: "/favicon.ico",
+  icon192: "/icon-192.png",
+  icon512: "/icon-512.png",
+  ogImage: "/og-image.png",
 };

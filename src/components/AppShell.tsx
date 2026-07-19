@@ -11,6 +11,7 @@ import { getMyProfile } from "@/lib/profile.functions";
 import { getMyRoles } from "@/lib/auth/role.functions";
 import { getOverview } from "@/lib/user.functions";
 import { BRAND } from "@/lib/brand";
+import { BrandLogo } from "@/components/BrandLogo";
 import { cn } from "@/lib/utils";
 
 type Nav = { label: string; to: string; icon: typeof LayoutDashboard; exact?: boolean };
@@ -143,15 +144,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
       <aside className="hidden w-[260px] shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex">
         <div className="p-5">
           <Link to="/app" className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-[11px] font-bold text-primary-foreground shadow-lg shadow-primary/30">
-              {BRAND.logoInitial}
-            </span>
-            <div>
-              <div className="text-sm font-semibold tracking-tight">{BRAND.name}</div>
-              <div className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                {BRAND.tagline}
-              </div>
-            </div>
+            <BrandLogo size="md" showWordmark />
           </Link>
         </div>
         <NavList />
@@ -200,9 +193,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
           <div className="flex items-center gap-2">
-            <span className="grid h-8 w-8 place-items-center rounded-xl bg-primary text-[10px] font-bold text-primary-foreground">
-              {BRAND.logoInitial}
-            </span>
+            <BrandLogo size="sm" />
             <span className="font-semibold">{BRAND.name}</span>
           </div>
           <button type="button" onClick={signOut} className="rounded-xl p-2 text-muted-foreground hover:bg-accent">

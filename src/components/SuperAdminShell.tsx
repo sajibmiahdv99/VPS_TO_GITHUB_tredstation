@@ -3,10 +3,11 @@ import { Link, Outlet, useRouter, useRouterState } from "@tanstack/react-router"
 import {
   LayoutDashboard, Users, CreditCard, DollarSign, Radio, FileCheck, TrendingUp,
   ShieldCheck, UserCheck, Landmark, LifeBuoy, FileText, Settings, ArrowLeft, Menu, X, LogOut,
-  Activity, SlidersHorizontal, Ticket, Crown, Download, Gift,
+  Activity, SlidersHorizontal, Ticket, Download, Gift,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { BRAND } from "@/lib/brand";
+import { BrandLogo } from "@/components/BrandLogo";
 import { cn } from "@/lib/utils";
 
 type Nav = { label: string; to: string; icon: typeof LayoutDashboard; exact?: boolean };
@@ -72,9 +73,7 @@ export function SuperAdminShell({ children }: { children?: ReactNode }) {
       <aside className="hidden w-[260px] shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex">
         <div className="p-5">
           <div className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-violet-600 text-xs font-bold text-white shadow-lg shadow-violet-600/30">
-              <Crown className="h-4 w-4" />
-            </span>
+            <BrandLogo size="md" variant="violet" />
             <div>
               <div className="text-sm font-semibold leading-none">Super admin</div>
               <div className="mt-1 font-mono text-[10px] uppercase tracking-wide text-violet-400">

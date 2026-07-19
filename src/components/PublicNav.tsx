@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { BRAND } from "@/lib/brand";
+import { BrandLogo } from "@/components/BrandLogo";
 import { getLocale, setLocale, t, type Locale } from "@/lib/i18n";
 
 export function PublicNav() {
@@ -22,9 +23,7 @@ export function PublicNav() {
     <header className="sticky top-0 z-40 border-b border-border/80 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-[11px] font-bold text-primary-foreground shadow-lg shadow-primary/30">
-            {BRAND.logoInitial}
-          </span>
+          <BrandLogo size="md" />
           <span className="text-lg font-semibold tracking-tight">{BRAND.name}</span>
         </Link>
         <nav className="hidden gap-8 text-sm text-muted-foreground md:flex">
